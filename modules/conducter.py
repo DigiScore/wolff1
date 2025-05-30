@@ -11,8 +11,8 @@ class Conducter:
     """
     Controls movement and shapes drawn by the robot.
     """
-
     def __init__(self, speed: int = 5):
+
         self.XARM_CONNECTED = config.xarm_connected
 
         if self.XARM_CONNECTED:
@@ -29,11 +29,9 @@ class Conducter:
 
         # Start operating vars
         self.current_phrase_num = 0  # number of phrases looped through, can be used to change behaviour over time...
-        self.joint_inc = 10  # scaling factor for incremental movement
-        self.continuous_mode = (
-            0  # mode for continuous module. 0 == on page, 1 == above page
-        )
-        self.continuous_source = 0  # source of data used for continous movement. 0 == random, 1 == NN, 2 == peak
+        self.joint_inc = 10          # scaling factor for incremental movement
+        self.continuous_mode = 0     # mode for continuous module. 0 == on page, 1 == above page
+        self.continuous_source = 0   # source of data used for continous movement. 0 == random, 1 == NN, 2 == peak
         self.global_speed = speed
         self.mic_in_prediction = config.mic_in_prediction
 
@@ -42,6 +40,7 @@ class Conducter:
 
         # inherit scripted test object
         # self.scripted_experiment = ScriptedExperiment()
+
 
         # # if self.drawbot:
         # #     self.drawbot.home()
@@ -63,12 +62,7 @@ class Conducter:
 
         # input('To start press ENTER when robot stops')
 
-        gesture_thread = Thread(
-            target=self.gesture_manager,
-            args=[
-                experiment_mode,
-            ],
-        )
+        gesture_thread = Thread(target=self.gesture_manager, args=[experiment_mode,])
         gesture_thread.start()
 
         if self.drawbot:
@@ -121,7 +115,7 @@ class Conducter:
                     self.drawbot.clear_commands()
 
             # Get length of gesture
-            phrase_length = randrange(300, 800) / 100  # + self.global_speed
+            phrase_length = (randrange(300, 800) / 100)  # + self.global_speed
             phrase_loop_end = time() + phrase_length
 
             logging.info(f"======== GESTURE - Daddy cycle started ========")
@@ -137,21 +131,21 @@ class Conducter:
                 A Normal Mode
                 """
                 if random() < self.mic_in_prediction:
-                    rnd_stream = "mic_in"
+                    rnd_stream = 'mic_in'
                 else:
                     rnd = randrange(stream_list_len)
                     rnd_stream = stream_list[rnd]
 
             elif experiment_mode == 1:
                 """
-                D Pre defined scripted moves only
+                B Pre defined scripted moves only
                 """
                 # start eroor checker
                 self.doing_script = True
                 script_thread = Thread(target=self.scripted_move_clear_alarms)
                 script_thread.start()
 
-                # run through fixed experiment script
+                # run through fixed experiment scrip[t
                 self.scripted_move()
                 self.hivemind.running = False
                 self.hivemind.MASTER_RUNNING = False
@@ -176,14 +170,13 @@ class Conducter:
 
                 # Generate rhythm rate here
                 rhythm_loop_end_time = time() + (randrange(500, 2000) / 1000)
-                logging.debug(f"end time = {rhythm_loop_end_time}")
+                logging.debug(f'end time = {rhythm_loop_end_time}')
 
                 # Speed for this phrase
-                arm_speed = randrange(30, 100)
+                arm_speed = randrange(30, 200)
                 if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 
-                # todo bypass this for Mic only
                 while time() < rhythm_loop_end_time:
                     ###########################################################
                     # Stream the chosen data around a loop
@@ -192,11 +185,9 @@ class Conducter:
                     # Make master output the current value of affect stream
                     # 1. Go get the current value from dict
                     thought_train = getattr(self.hivemind, rnd_stream)
-                    logging.debug(
-                        f"======== RHYTHM cycle ========"
-                        f"|Affect stream output {rnd_stream}"
-                        f" == {thought_train}"
-                    )
+                    logging.debug(f'======== RHYTHM cycle ========'
+                                  f'|Affect stream output {rnd_stream}'
+                                  f' == {thought_train}')
 
                     # 2. Send to Master Output
                     self.hivemind.master_stream = thought_train
@@ -206,7 +197,7 @@ class Conducter:
                     ###########################################################
                     # [HIGH response]
                     if thought_train > 0.8 or self.hivemind.interrupted:
-                        logging.info("Interrupt > !!! HIGH !!!")
+                        logging.info('Interrupt > !!! HIGH !!!')
 
                         # A - Refill dict with random
                         self.hivemind.randomiser()
@@ -225,7 +216,7 @@ class Conducter:
 
                     # [LOW response]
                     elif thought_train < 0.1:
-                        logging.info("Interrupt < LOW : no response")
+                        logging.info('Interrupt < LOW : no response')
                         if self.drawbot:
                             if random() < 0.36:
                                 self.design_move(thought_train)
@@ -238,8 +229,8 @@ class Conducter:
                     sleep(0.1)
 
         if self.drawbot:
-            self.drawbot.go_position_ready()
-        logging.info("quitting director thread")
+                self.drawbot.go_position_ready()
+        logging.info('quitting director thread')
         self.hivemind.MASTER_RUNNING = False
 
         # print gesture list for "scripted list test"
@@ -257,53 +248,57 @@ class Conducter:
         arc_range = thought_train * 10
 
         # make a random choice (for now)
-        # todo -if mic only input (mode 1) map 12 notes of octave onto (%12) a gesture as randchoice variable)
+        # todo - maybe map these across the range of input thought-trains
         randchoice = randrange(12)
-        logging.debug(f"Random choice: {randchoice}")
+        logging.debug(f'Random choice: {randchoice}')
 
         match randchoice:
             case 0:
-                decision_type = "draw line"
-                paramx = x + self.rnd(thought_train * 10)
-                paramy = x + self.rnd(thought_train * 10)
-                self.drawbot.go_draw(paramx, paramy, False)
+                decision_type = 'draw line'
+                paramx = x + self.rnd(thought_train*10)
+                paramy = x + self.rnd(thought_train*10)
+                self.drawbot.go_draw(paramx,
+                                     paramy,
+                                     False)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.go_draw(x, y, False)", paramx, paramy, False])
 
             case 1:
-                decision_type = "random character"
+                decision_type = 'random character'
                 param = thought_train * randrange(10, 20)
                 self.drawbot.draw_random_char(param)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.draw_random_char(param)", param])
 
             case 2:
-                decision_type = "dot"
+                decision_type = 'dot'
                 self.drawbot.dot()
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.dot"])
 
             case 3:
-                decision_type = "note head"
+                decision_type = 'note head'
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.note_head(note_size)", note_size])
 
             case 4:
-                decision_type = "note head and line"
+                decision_type = 'note head and line'
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.note_head(note_size)", note_size])
 
-                paramx = self.rnd(thought_train * 10)
-                paramy = self.rnd(thought_train * 10)
-                self.drawbot.position_move_by(paramx, paramy, 0, wait=True)
+                paramx = self.rnd(thought_train*10)
+                paramy = self.rnd(thought_train*10)
+                self.drawbot.position_move_by(paramx,
+                                              paramy,
+                                              0, wait=True)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.position_move_by(paramx, paramy,0, wait=True)", paramx, paramy])
 
             case 5:
-                decision_type = "random jump"
+                decision_type = 'random jump'
                 self.drawbot.go_random_jump()
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.go_random_jump()"])
 
             case 6:
-                decision_type = "draw arc"
+                decision_type = 'draw arc'
                 x1 = x + self.rnd(arc_range)
                 y1 = y + self.rnd(arc_range)
                 x2 = x + self.rnd(arc_range)
@@ -312,36 +307,36 @@ class Conducter:
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.arc2D(x1, y1, x2, y2)", x1, y1, x2, y2])
 
             case 7:
-                decision_type = "small squiggle"
+                decision_type = 'small squiggle'
                 squiggle_list = []
                 for _ in range(randrange(3, 9)):
-                    squiggle_list.append(
-                        (self.rnd(arc_range), self.rnd(arc_range), self.rnd(arc_range))
-                    )
+                    squiggle_list.append((self.rnd(arc_range),
+                                          self.rnd(arc_range),
+                                          self.rnd(arc_range)))
                 self.drawbot.squiggle(squiggle_list)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.squiggle(squiggle_list)", squiggle_list])
 
             case 8:
-                decision_type = "draw circle"
+                decision_type = 'draw circle'
                 side = randrange(2)
                 x1 = int(arc_range)
                 self.drawbot.draw_circle(x1, side)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.draw_circle(x1, side)", x1, side])
 
             case 9:
-                decision_type = "arc"
+                decision_type = 'arc'
                 x1 = x + self.rnd(arc_range)
                 y1 = y + self.rnd(arc_range)
                 self.drawbot.go_draw(x1, y1)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.go_draw(x1, y1)", x1, y1])
 
             case 10:
-                decision_type = "return to coord"
+                decision_type = 'return to coord'
                 self.drawbot.return_to_coord()
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.return_to_coord()"])
 
             case 11:
-                decision_type = "random pen move"
+                decision_type = 'random pen move'
                 self.drawbot.random_pen()
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.random_pen()"])
 
@@ -351,6 +346,7 @@ class Conducter:
         # log the decision
         logging.info(decision_type)
         self.hivemind.design_decision = decision_type
+
 
     def high_energy_response(self):
         """
@@ -366,7 +362,7 @@ class Conducter:
         """
         Smart collapse of all threads and comms.
         """
-        print("TERMINATING robot and conducter")
+        print('TERMINATING robot and conducter')
         if self.drawbot:
             self.drawbot.clear_commands()
             if self.XARM_CONNECTED:
@@ -388,7 +384,7 @@ class Conducter:
         result = (randrange(1, 5) + randrange(power_of_command)) * pos
         if result == 0:
             result = 1
-        logging.debug(f"Rnd result = {result}")
+        logging.debug(f'Rnd result = {result}')
         return result
 
     def scripted_move_clear_alarms(self):
@@ -409,12 +405,7 @@ class Conducter:
             sleep(0.10782599449157715)
             self.drawbot.random_pen()
             sleep(6.124422073364258)
-            self.drawbot.arc2D(
-                484.6731731508081,
-                -254.91455764466286,
-                489.6731731508081,
-                -254.91455764466286,
-            )
+            self.drawbot.arc2D(484.6731731508081, -254.91455764466286, 489.6731731508081, -254.91455764466286)
             sleep(0.3409392833709717)
             self.drawbot.dot
             sleep(0.2204124927520752)
@@ -448,7 +439,7 @@ class Conducter:
             sleep(0.3471360206604004)
             self.drawbot.go_random_jump()
             sleep(3.769630193710327)
-            (self.drawbot.note_head(4),)
+            self.drawbot.note_head(4),
             sleep(3.6959636211395264)
             self.drawbot.draw_random_char(0.00062333984375)
             sleep(0.5642523765563965)
@@ -501,17 +492,7 @@ class Conducter:
             self.drawbot.random_pen()
             sleep(0.3683357238769531)
             self.drawbot.squiggle(
-                [
-                    (4, -7, 2),
-                    (-7, -4, 7),
-                    (6, -4, -2),
-                    (-6, -6, -6),
-                    (9, 3, -6),
-                    (-3, -9, 5),
-                    (4, 2, 6),
-                    (8, -3, 6),
-                ]
-            )
+                [(4, -7, 2), (-7, -4, 7), (6, -4, -2), (-6, -6, -6), (9, 3, -6), (-3, -9, 5), (4, 2, 6), (8, -3, 6)])
             sleep(0.10338068008422852)
             self.drawbot.draw_random_char(7.810420121020257)
             sleep(0.10780787467956543)
@@ -554,17 +535,7 @@ class Conducter:
             self.drawbot.draw_random_char(0.0006138671875)
             sleep(8.78401517868042)
             self.drawbot.squiggle(
-                [
-                    (1, -3, -2),
-                    (4, 3, 3),
-                    (2, 2, -1),
-                    (3, 1, -3),
-                    (1, 3, -3),
-                    (-2, -4, -2),
-                    (1, 4, -1),
-                    (2, 3, 1),
-                ]
-            )
+                [(1, -3, -2), (4, 3, 3), (2, 2, -1), (3, 1, -3), (1, 3, -3), (-2, -4, -2), (1, 4, -1), (2, 3, 1)])
             sleep(0.45129990577697754)
             self.drawbot.go_draw(63.215, -293.799)
             sleep(1.088390588760376)
