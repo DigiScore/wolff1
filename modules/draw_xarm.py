@@ -333,37 +333,18 @@ class Drawbot(XArmAPI):
         """
         Move to the position (x, y, z) at a given speed and acceleration.
         """
-        self.set_only_check_type(3)
-        code = self.set_position(
-            x=x,
-            y=y,
-            z=z,
-            roll=self.roll,
-            pitch=self.pitch,
-            yaw=self.yaw,
-            speed=speed,
-            mvacc=mvacc,
-            wait=wait,
-            relative=relative,
-            # motion_type=2,
-        )
-        if code == 0:
-            self.set_only_check_type(0)
-            self.set_position(
-                x=x,
-                y=y,
-                z=z,
-                roll=self.roll,
-                pitch=self.pitch,
-                yaw=self.yaw,
-                speed=speed,
-                mvacc=mvacc,
-                wait=wait,
-                relative=relative,
-                # motion_type=2,
-            )
-        else:
-            return
+        self.set_position(x=x,
+                          y=y,
+                          z=z,
+                          roll=self.roll,
+                          pitch=self.pitch,
+                          yaw=self.yaw,
+                          speed=speed,
+                          mvacc=mvacc,
+                          wait=wait,
+                          relative=relative,
+                          # motion_type=2
+                          )
 
     def tool_move(self,
                   abs_angle: int,
