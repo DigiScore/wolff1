@@ -2,7 +2,6 @@ import logging
 from time import time, sleep
 import os
 import art
-from random import shuffle
 import subprocess
 from threading import Thread
 from pathlib import Path
@@ -83,12 +82,10 @@ class Main:
         # while self.hivemind.MASTER_RUNNING:
         for repeat in range(2):
             random_experiment_list = generate_random_modes()
-            print(f"=========================================         Shuffling experimental modes: Block {repeat + 1}: {random_experiment_list}")
 
             for i, experiment_mode in enumerate(random_experiment_list):
                 # Init Conducter & Gesture management (controls XArm)
                 self.robot = Conducter()
-
 
                 print(f"=========================================         Running experimental mode:  {repeat + 1} - {experiment_mode}")
                 # reset variables
