@@ -114,7 +114,7 @@ class Nebula(Listener, AIFactoryRAMI):
     def restart_bitalino(self):
         warnings.simplefilter("ignore")
         while True:
-            sleep(120)
+            sleep(180)
             self.bitalino_on = False
             with warnings.catch_warnings():
                 try:
