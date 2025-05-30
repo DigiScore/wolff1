@@ -86,7 +86,7 @@ class Main:
         for i in random_experiment_list:
             print(f"\t{i}")
 
-        repeat = 1
+        repeat = 0
         for i, experiment_mode in enumerate(random_experiment_list):
             # Init Conducter & Gesture management (controls XArm)
             self.robot = Conducter()
