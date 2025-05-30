@@ -19,8 +19,11 @@ pip install -r requirements.txt
 ## Quick Start
 - Connect the robot to the computer (follow XArm instructions for static IP)
 - Connect the BITalino to the computer via bluetooth (passcode 1234)
-- Run clock.py in terminal
-- Run `main.py`
+- Enter the directory and run the script using the following commands in a terminal window:
+
+      cd <directory>
+      poetry env activate
+      poetry run python main.py
 
 ## Important operational fields in config.py
 - xarm_connected: bool: Is the XArm connected?
