@@ -114,7 +114,7 @@ class Main:
                 else:
                     sleep(1)
             self.robot.terminate()
-            print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}.")
+            print(f"=========================================         Completed experiment mode  {repeat} - {experiment_mode}.")
             if i < len(random_experiment_list)- 1:
                 answer = input("Next Experiment?")
             else:
