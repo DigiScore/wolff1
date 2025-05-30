@@ -56,3 +56,4 @@ class APIState(object):
     CHECK_FAILED = 101  # 等待操作完成过程检测状态连续失败次数过多
     END_EFFECTOR_HAS_FAULT = 102  # 末端配件有错误
     END_EFFECTOR_NOT_ENABLED = 103  # 末端配件未使能
+

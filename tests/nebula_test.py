@@ -10,10 +10,8 @@ test = Nebula()
 test.main_loop()
 
 while True:
-    print(
-        test.hivemind.mic_in,
-        test.hivemind.move_rnn,
-        test.hivemind.self_awareness,
-        test.hivemind.eda,
-    )
+    print(test.hivemind.mic_in,
+          test.hivemind.move_rnn,
+          test.hivemind.self_awareness,
+          test.hivemind.eda)
     sleep(0.1)

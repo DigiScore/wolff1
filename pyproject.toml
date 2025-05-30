@@ -1,5 +1,5 @@
 [project]
-name = "wolff2"
+name = "wolff1"
 version = "0.1.0"
 description = "Test for togetherness"
 authors = [
@@ -20,15 +20,10 @@ dependencies = [
     "requests (>=2.32.3,<3.0.0)",
     "pandas (>=2.2.3,<3.0.0)",
     "neurokit2 (>=0.2.10,<0.3.0)",
-    "pyzmq (>=26.2.1,<27.0.0)",
-    "pytest (>=8.3.5,<9.0.0)",
-    "pywavelets (>=1.8.0,<2.0.0)"
+    "pyzmq (>=26.2.1,<27.0.0)"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-package-mode = false
