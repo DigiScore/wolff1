@@ -83,7 +83,6 @@ class Main:
         # while self.hivemind.MASTER_RUNNING:
         for repeat in range(2):
             random_experiment_list = generate_random_modes()
-            shuffle(random_experiment_list)
             print(f"=========================================         Shuffling experimental modes: Block {repeat + 1}: {random_experiment_list}")
 
             for i, experiment_mode in enumerate(random_experiment_list):
