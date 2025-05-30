@@ -80,43 +80,48 @@ class Main:
         Manage the experiment loop.
         """
         # while self.hivemind.MASTER_RUNNING:
-        for repeat in range(2):
-            random_experiment_list = generate_random_modes()
+        random_experiment_list = generate_random_modes()
 
-            for i, experiment_mode in enumerate(random_experiment_list):
-                # Init Conducter & Gesture management (controls XArm)
-                self.robot = Conducter()
+        print("\nMODES FOR THIS SESSION:")
+        for i in random_experiment_list:
+            print(f"\t{i}")
 
-                print(f"=========================================         Running experimental mode:  {repeat + 1} - {experiment_mode}")
-                # reset variables
-                self.hivemind.MASTER_RUNNING = True
-                self.first_time_through = True
-                while self.hivemind.MASTER_RUNNING:
-                    # is this first time through with a new experiment
-                    # if self.ui.go_flag:
-                    # make new directory for this log e.g. ../data/20240908_123456
-                    if DATA_LOGGING:
-                        if self.first_time_through:
-                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF1_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
-                            self.makenewdir(self.master_path)
-                    else:
-                        self.master_path = None
+        repeat = 1
+        for i, experiment_mode in enumerate(random_experiment_list):
+            # Init Conducter & Gesture management (controls XArm)
+            self.robot = Conducter()
 
-                    # run all systems
+            print(f"=========================================         Running experimental mode:  {repeat} - {experiment_mode}")
+            # reset variables
+            self.hivemind.MASTER_RUNNING = True
+            self.first_time_through = True
+            while self.hivemind.MASTER_RUNNING:
+                # is this first time through with a new experiment
+                # if self.ui.go_flag:
+                # make new directory for this log e.g. ../data/20240908_123456
+                if DATA_LOGGING:
                     if self.first_time_through:
-                        self.wolff1_main(experiment_mode)
-                        self.first_time_through = False
-
-                    else:
-                        sleep(1)
-                self.robot.terminate()
-                print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}.")
-                if i < len(random_experiment_list)- 1:
-                    answer = input("Next Experiment?")
+                        self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF1_block_{repeat}_performance_{i+1}_mode_{experiment_mode}")
+                        self.makenewdir(self.master_path)
                 else:
-                    print("TERMINATING experiment mode.")
-                self.first_time_through = True
-            answer = input("Next Experiment?")
+                    self.master_path = None
+
+                # run all systems
+                if self.first_time_through:
+                    self.wolff1_main(experiment_mode)
+                    self.first_time_through = False
+
+                else:
+                    sleep(1)
+            self.robot.terminate()
+            print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}.")
+            if i < len(random_experiment_list)- 1:
+                answer = input("Next Experiment?")
+            else:
+                print("TERMINATING experiment mode.")
+            repeat += 1
+            self.first_time_through = True
+        answer = input("Next Experiment?")
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False
