@@ -3,7 +3,7 @@ from typing import List
 
 
 def generate_random_modes() -> List[int]:
-    random_list = []
+    random_list = [1, 1]
     for _ in range(3):
         first_number = random.randint(0, 1)
         random_list.append(first_number)
