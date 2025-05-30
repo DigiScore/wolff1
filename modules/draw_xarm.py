@@ -25,6 +25,7 @@ class Drawbot(XArmAPI):
     """
     Translation class for xArm control and primitive commands of robot arm.
     """
+
     def __init__(self, port):
         self.hivemind = DataBorg()
 
@@ -82,12 +83,12 @@ class Drawbot(XArmAPI):
         # self.random_pen()
 
         # Make a shared list / dict
-        self.ready_position = [sum(config.xarm_x_extents)/2, 0, self.z + 100]
-        self.draw_position = [sum(config.xarm_x_extents)/2, 0, self.z]
-        self.position_one = [sum(config.xarm_x_extents)/2,
+        self.ready_position = [sum(config.xarm_x_extents) / 2, 0, self.z + 100]
+        self.draw_position = [sum(config.xarm_x_extents) / 2, 0, self.z]
+        self.position_one = [sum(config.xarm_x_extents) / 2,
                              config.xarm_y_extents[0],
                              self.z]
-        self.position_two = [sum(config.xarm_x_extents)/2,
+        self.position_two = [sum(config.xarm_x_extents) / 2,
                              config.xarm_y_extents[1],
                              self.z]
         self.x_extents = config.xarm_x_extents
@@ -217,7 +218,7 @@ class Drawbot(XArmAPI):
     #     logging.debug(f'Rnd result = {result}')
     #     return result
 
-    def clear_alarms_script(self, error_code = None) -> None:
+    def clear_alarms_script(self, error_code=None) -> None:
         """
         Clear the alarms logs and warnings.
         """
@@ -240,7 +241,7 @@ class Drawbot(XArmAPI):
                 # self.go_random_3d()
                 # self.return_to_coord()
 
-    def clear_alarms(self, error_code = None) -> None:
+    def clear_alarms(self, error_code=None) -> None:
         """
         Clear the alarms logs and warnings.
         """
@@ -333,19 +334,19 @@ class Drawbot(XArmAPI):
         """
         Move to the position (x, y, z) at a given speed and acceleration.
         """
-        self.set_only_check_type(3)
+        self.set_only_check_type(1)
         code = self.set_position(
-                x=x,
-              y=y,
-              z=z,
-              roll=self.roll,
-              pitch=self.pitch,
-              yaw=self.yaw,
-              speed=speed,
-              mvacc=mvacc,
-              wait=wait,
-              relative=relative,
-              # motion_type=2
+            x=x,
+            y=y,
+            z=z,
+            roll=self.roll,
+            pitch=self.pitch,
+            yaw=self.yaw,
+            speed=speed,
+            mvacc=mvacc,
+            wait=wait,
+            relative=relative,
+            # motion_type=2
         )
         if code == 0:
             self.set_only_check_type(0)
@@ -740,7 +741,8 @@ class Drawbot(XArmAPI):
         self.go_draw(x=pos[0], y=pos[1], wait=self.wait_commands)
         self.triangles.append(triangle)
 
-    def draw_sunburst(self, r, randomAngle=True):  # draws a sunburst from the robots current position, r = size of lines, num = number of lines
+    def draw_sunburst(self, r,
+                      randomAngle=True):  # draws a sunburst from the robots current position, r = size of lines, num = number of lines
         """
         Draw a sunburst from the pens position. Will draw r number of lines
         coming from the centre point. Can be drawn with lines at random angles
@@ -874,11 +876,11 @@ class Drawbot(XArmAPI):
         if _char == "A" or _char == "a":
 
             local_pos = [
-                (0, 0),                  # bottom left
+                (0, 0),  # bottom left
                 (size * 2, - size / 2),  # top
-                (0, - size),             # bottom right
-                (size, - size * 0.75),   # mid right
-                (size, - size * 0.25)    # mid left
+                (0, - size),  # bottom right
+                (size, - size * 0.75),  # mid right
+                (size, - size * 0.25)  # mid left
             ]
         elif _char == "B" or _char == "b":
             self.draw_b(size=size, wait=self.wait_commands)
@@ -894,23 +896,23 @@ class Drawbot(XArmAPI):
 
         elif _char == "E" or _char == "e":
             local_pos = [
-                (0, 0),            # bottom right
-                (0, size),         # bottom left
+                (0, 0),  # bottom right
+                (0, size),  # bottom left
                 (size * 2, size),  # top left
-                (size * 2, 0),     # top right
-                (size, 0),         # mid right (jump to here)
-                (size, size)       # mid left
+                (size * 2, 0),  # top right
+                (size, 0),  # mid right (jump to here)
+                (size, size)  # mid left
             ]
 
             jump_num = 4
 
         elif _char == "F" or _char == "f":
             local_pos = [
-                (0, 0),                  # bottom left
-                (size * 2, 0),           # top left
+                (0, 0),  # bottom left
+                (size * 2, 0),  # top left
                 (size * 2, - size / 2),  # top right
-                (size, - size / 2),      # mid right (jump to here)
-                (size, 0)                # mid left
+                (size, - size / 2),  # mid right (jump to here)
+                (size, 0)  # mid left
             ]
 
             jump_num = 3
@@ -964,10 +966,10 @@ class Drawbot(XArmAPI):
         char.append("P")
 
         local_pos = [
-            (0, 0),                       # bottom of letter
-            (size * 2, 0),                # top of letter
+            (0, 0),  # bottom of letter
+            (size * 2, 0),  # top of letter
             (size * 0.75, -size * 0.85),  # peak of curve
-            (size * 1.2, 0)               # middle of letter
+            (size * 1.2, 0)  # middle of letter
         ]
 
         world_pos = [
@@ -995,11 +997,11 @@ class Drawbot(XArmAPI):
         char.append("B")
 
         local_pos = [
-            (0, 0),               # 0 bottom left
-            (size * 2, 0),        # 1 top right
+            (0, 0),  # 0 bottom left
+            (size * 2, 0),  # 1 top right
             (size * 1.5, -size),  # 2 peak of top curve
-            (size, 0),            # 3 mid left
-            (size * 0.5, -size)   # 4 peak of bottom curve
+            (size, 0),  # 3 mid left
+            (size * 0.5, -size)  # 4 peak of bottom curve
         ]
 
         world_pos = [
@@ -1029,8 +1031,8 @@ class Drawbot(XArmAPI):
 
         local_pos = [
             (size * 0.3, 0),  # 0 bottom of curve
-            (size, size),     # 1 middle of curve
-            (size * 1.7, 0)   # 2 top of curve
+            (size, size),  # 1 middle of curve
+            (size * 1.7, 0)  # 2 top of curve
         ]
 
         world_pos = [
@@ -1055,9 +1057,9 @@ class Drawbot(XArmAPI):
         char.append("D")
 
         local_pos = [
-            (0, 0),         # 0 bottom left
+            (0, 0),  # 0 bottom left
             (size * 2, 0),  # 1 top left
-            (size, -size)   # 2 peak of curve
+            (size, -size)  # 2 peak of curve
         ]
 
         world_pos = [
@@ -1083,10 +1085,10 @@ class Drawbot(XArmAPI):
         char.append("G")
 
         local_pos = [
-            (0, 0),            # 0 top right
-            (- size, size),    # 1 peak of curve
-            (- size * 2, 0),   # 2 bottom right
-            (-size, 0),        # 3 mid right
+            (0, 0),  # 0 top right
+            (- size, size),  # 1 peak of curve
+            (- size * 2, 0),  # 2 bottom right
+            (-size, 0),  # 3 mid right
             (-size, size / 2)  # 4 center point
 
         ]
@@ -1183,7 +1185,8 @@ class Drawbot(XArmAPI):
         shape_group[len(shape_group) - 1] = new_pos  # set the shape group position to the new pos with offset
 
         self.go_draw(new_pos[0], new_pos[1])  # go to new position
-        self.draw_shape_group(shape_group, uniform(-3, 3))  # red-draw shape group, set variation param to random, varies sizes when re-drawing shape group
+        self.draw_shape_group(shape_group, uniform(-3,
+                                                   3))  # red-draw shape group, set variation param to random, varies sizes when re-drawing shape group
 
     def return_to_coord(self):
         """
