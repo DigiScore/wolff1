@@ -44,32 +44,7 @@ class Main:
         self.hivemind = DataBorg()
 
         # # Init data logging
-        if DATA_LOGGING:
-            ###################
-            # Start Bitalino
-            ###################
-
-            # start bitalino
-            BITALINO_MAC_ADDRESS = config.mac_address
-            BITALINO_BAUDRATE = config.baudrate
-            BITALINO_ACQ_CHANNELS = config.channels
-
-            eda_started = False
-            while not eda_started:
-                try:
-                    self.eda = bitalino_module.BITalino(BITALINO_MAC_ADDRESS)
-                    eda_started = True
-                except OSError:
-                    print("Unable to connect to Bitalino")
-                    retry = input("Retry (y/N)? ")
-                    if retry.lower() != "y":  #  or retry.lower() != "yes":
-                        eda_started = True
-
-            self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
-            first_eda_data = self.eda.read(1)[0]
-            logging.info(f"Data from BITalino = {first_eda_data}")
-        else:
-            self.eda = None
+        self.eda = None
 
         ###################
         # Start Nebula AI
