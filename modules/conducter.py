@@ -11,6 +11,7 @@ class Conducter:
     """
     Controls movement and shapes drawn by the robot.
     """
+
     def __init__(self, speed: int = 5):
 
         self.XARM_CONNECTED = config.xarm_connected
@@ -29,9 +30,9 @@ class Conducter:
 
         # Start operating vars
         self.current_phrase_num = 0  # number of phrases looped through, can be used to change behaviour over time...
-        self.joint_inc = 10          # scaling factor for incremental movement
-        self.continuous_mode = 0     # mode for continuous module. 0 == on page, 1 == above page
-        self.continuous_source = 0   # source of data used for continous movement. 0 == random, 1 == NN, 2 == peak
+        self.joint_inc = 10  # scaling factor for incremental movement
+        self.continuous_mode = 0  # mode for continuous module. 0 == on page, 1 == above page
+        self.continuous_source = 0  # source of data used for continous movement. 0 == random, 1 == NN, 2 == peak
         self.global_speed = speed
         self.mic_in_prediction = config.mic_in_prediction
 
@@ -40,7 +41,6 @@ class Conducter:
 
         # inherit scripted test object
         # self.scripted_experiment = ScriptedExperiment()
-
 
         # # if self.drawbot:
         # #     self.drawbot.home()
@@ -62,7 +62,7 @@ class Conducter:
 
         # input('To start press ENTER when robot stops')
 
-        gesture_thread = Thread(target=self.gesture_manager, args=[experiment_mode,])
+        gesture_thread = Thread(target=self.gesture_manager, args=[experiment_mode, ])
         gesture_thread.start()
 
         if self.drawbot:
@@ -138,19 +138,7 @@ class Conducter:
 
             elif experiment_mode == 1:
                 """
-                B Random poetry
-                """
-                rnd_stream = 'rnd_poetry'
-
-            elif experiment_mode == 2:
-                """
-                C Human only input
-                """
-                rnd_stream = 'mic_in'
-
-            elif experiment_mode == 3:
-                """
-                D Pre defined scripted moves only
+                B Pre defined scripted moves only
                 """
                 # start eroor checker
                 self.doing_script = True
@@ -241,7 +229,7 @@ class Conducter:
                     sleep(0.1)
 
         if self.drawbot:
-                self.drawbot.go_position_ready()
+            self.drawbot.go_position_ready()
         logging.info('quitting director thread')
         self.hivemind.MASTER_RUNNING = False
 
@@ -267,8 +255,8 @@ class Conducter:
         match randchoice:
             case 0:
                 decision_type = 'draw line'
-                paramx = x + self.rnd(thought_train*10)
-                paramy = x + self.rnd(thought_train*10)
+                paramx = x + self.rnd(thought_train * 10)
+                paramy = x + self.rnd(thought_train * 10)
                 self.drawbot.go_draw(paramx,
                                      paramy,
                                      False)
@@ -297,8 +285,8 @@ class Conducter:
                 self.drawbot.note_head(size=note_size)
                 # self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.note_head(note_size)", note_size])
 
-                paramx = self.rnd(thought_train*10)
-                paramy = self.rnd(thought_train*10)
+                paramx = self.rnd(thought_train * 10)
+                paramy = self.rnd(thought_train * 10)
                 self.drawbot.position_move_by(paramx,
                                               paramy,
                                               0, wait=True)
@@ -358,7 +346,6 @@ class Conducter:
         # log the decision
         logging.info(decision_type)
         self.hivemind.design_decision = decision_type
-
 
     def high_energy_response(self):
         """

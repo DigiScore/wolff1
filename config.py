@@ -1,16 +1,14 @@
 # [EXPERIMENT MODES]
-experiment_modes = [0, 1, 2, 3]
-# 0 = normal mode
-# 1 = random poetry only. No AI. No human interaction
-# 2 = human input only
-# 3 = scripted list
+experiment_modes = [0, 1]
+# 0 = normal AI mode
+# 1 = scripted list
 
 
 # [HARDWARE]
 xarm_connected = True
 
 # [DATAWRITER]
-data_logging = False
+data_logging = True
 path = "data"
 figsize_xy = (100, 12)
 samplerate = 0.01
@@ -23,6 +21,7 @@ temperature = 0
 
 # [XARM]
 xarm1_port = '192.168.1.212'
+# xarm1_port = '127.0.0.1'
 xarm_x_extents = [-500, 500]  # cartesian coords in mm
 xarm_y_extents = [-500, 500]
 xarm_z_extents = [55, 1000]

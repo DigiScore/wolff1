@@ -2,7 +2,6 @@ import logging
 from time import time, sleep
 import os
 import art
-from random import shuffle
 import subprocess
 from threading import Thread
 from pathlib import Path
@@ -13,6 +12,7 @@ from modules.ai_robot_data_writer import AIRobotDataWriter
 from modules.biodata_data_writer import BiodataDataWriter
 from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
+from modules.randomize_modes import generate_random_modes
 # from modules.rami_main import Rami_Main
 # from clock import Clock
 
@@ -68,7 +68,7 @@ class Main:
         ###################
         # Start Nebula AI
         ###################
-        art.tprint("Wolff 1")
+        art.tprint("Wolff 2")
 
         answer = input("Click enter when you are ready to go, after STARTING CLOCK & OPEN SIGNALS")
 
@@ -80,46 +80,48 @@ class Main:
         Manage the experiment loop.
         """
         # while self.hivemind.MASTER_RUNNING:
-        for repeat in range(2):
-            random_experiment_list = config.experiment_modes
-            shuffle(random_experiment_list)
-            print(f"=========================================         Shuffling experimental modes: Block {repeat + 1}: {random_experiment_list}")
+        random_experiment_list = generate_random_modes()
 
-            for i, experiment_mode in enumerate(random_experiment_list):
-                # Init Conducter & Gesture management (controls XArm)
-                self.robot = Conducter()
+        print("\nMODES FOR THIS SESSION:")
+        for i in random_experiment_list:
+            print(f"\t{i}")
 
+        repeat = 1
+        for i, experiment_mode in enumerate(random_experiment_list):
+            # Init Conducter & Gesture management (controls XArm)
+            self.robot = Conducter()
 
-                print(f"=========================================         Running experimental mode:  {repeat + 1} - {experiment_mode}")
-                # reset variables
-                self.hivemind.MASTER_RUNNING = True
-                self.first_time_through = True
-                while self.hivemind.MASTER_RUNNING:
-                    # is this first time through with a new experiment
-                    # if self.ui.go_flag:
-                    # make new directory for this log e.g. ../data/20240908_123456
-                    if DATA_LOGGING:
-                        if self.first_time_through:
-                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF1_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
-                            self.makenewdir(self.master_path)
-                    else:
-                        self.master_path = None
-
-                    # run all systems
+            print(f"=========================================         Running experimental mode:  {repeat} - {experiment_mode}")
+            # reset variables
+            self.hivemind.MASTER_RUNNING = True
+            self.first_time_through = True
+            while self.hivemind.MASTER_RUNNING:
+                # is this first time through with a new experiment
+                # if self.ui.go_flag:
+                # make new directory for this log e.g. ../data/20240908_123456
+                if DATA_LOGGING:
                     if self.first_time_through:
-                        self.wolff1_main(experiment_mode)
-                        self.first_time_through = False
-
-                    else:
-                        sleep(1)
-                self.robot.terminate()
-                print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}.")
-                if i < len(random_experiment_list)- 1:
-                    answer = input("Next Experiment?")
+                        self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF1_block_{repeat}_performance_{i+1}_mode_{experiment_mode}")
+                        self.makenewdir(self.master_path)
                 else:
-                    print("TERMINATING experiment mode.")
-                self.first_time_through = True
-            answer = input("Next Experiment?")
+                    self.master_path = None
+
+                # run all systems
+                if self.first_time_through:
+                    self.wolff1_main(experiment_mode)
+                    self.first_time_through = False
+
+                else:
+                    sleep(1)
+            self.robot.terminate()
+            print(f"=========================================         Completed experiment mode  {repeat} - {experiment_mode}.")
+            if i < len(random_experiment_list)- 1:
+                answer = input("Next Experiment?")
+            else:
+                print("TERMINATING experiment mode.")
+            repeat += 1
+            self.first_time_through = True
+        answer = input("Next Experiment?")
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False
