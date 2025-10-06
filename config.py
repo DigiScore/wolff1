@@ -33,6 +33,8 @@ xarm_fenced = True
 mic_sensitivity = 10000
 mic_in_prediction = 0.36
 mic_in_logging = False
+# volume
+volume_range = [1000, 2000]
 
 # [BITALINO]
 baudrate = 100
